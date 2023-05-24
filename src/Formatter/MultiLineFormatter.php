@@ -1,6 +1,6 @@
 <?php
 
-namespace Azay\Monolog;
+namespace Azay\Monolog\Formatter;
 
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Logger;
@@ -39,9 +39,10 @@ final class MultiLineFormatter implements FormatterInterface
 
         if ( !empty( $record[ 'context' ] ) )
             foreach ( $record[ 'context' ] as $key => $value ) {
-                $output .= empty( $key )
-                    ? $this->printable( $value )
-                    : [ $key, $this->printable( $value ) ];
+
+                $output .= is_int( $key )
+                     ? $this->printable($value)
+                     : $this->printable( $key ) . ': '. $this->printable( $value ) ;
             }
 
         if ( !empty( $record[ 'extra' ] ) )
