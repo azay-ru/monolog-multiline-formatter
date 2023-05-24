@@ -1,0 +1,24 @@
+{
+    "name": "azay/multiline-formatter",
+    "description": "Multiline Formatter for Monolog",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "azay-ru",
+            "email": "azay.dev@inbox.ru"
+        }
+    ],
+    "keywords": [
+        "monolog",
+        "formatter"
+    ],
+    "require": {
+        "php": ">=7.0",
+        "ext-json": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Azay\\Monolog\\": "src/"
+        }
+    }
+}
