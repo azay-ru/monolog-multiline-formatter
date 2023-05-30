@@ -11,7 +11,7 @@
 Installation is possible using Composer.
 
 ```shell
-composer require azay/multiline-formatter
+composer require azay/monolog-multiline-formatter
 ```
 
 ## Usage

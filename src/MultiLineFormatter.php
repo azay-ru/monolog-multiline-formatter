@@ -44,7 +44,7 @@ final class MultiLineFormatter implements FormatterInterface
             foreach ( $record[ 'context' ] as $key => $value ) {
                 $output .= empty( $key )
                     ? $this->printable( $value )
-                    : [ $key, $this->printable( $value ) ];
+                    : $this->printable([ $key, $value ]) ;
             }
 
         if ( !empty( $record[ 'extra' ] ) )
