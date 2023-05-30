@@ -2,6 +2,7 @@
 
 namespace Azay\Monolog;
 
+use DateTimeImmutable;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Logger;
 
@@ -30,9 +31,11 @@ final class MultiLineFormatter implements FormatterInterface
 
     public function format( array $record ): string
     {
-        $output = date( $this->dateFormat )
+        $output =
+            $record[ 'datetime' ]->format( $this->dateFormat )
             . $this->space
-            . Logger::getLevelName( $record[ 'level' ] )
+            . ( empty( $record[ 'channel' ] ) ? '' : ( $record[ 'channel' ] . $this->space ) )
+            . '[' . Logger::getLevelName( $record[ 'level' ] ) . ']'
             . $this->space
             . $record[ 'message' ]
             . $this->break;

@@ -1,5 +1,5 @@
 {
-    "name": "azay/multiline-formatter",
+    "name": "azay/monolog-multiline-formatter",
     "description": "Multiline Formatter for Monolog",
     "license": "MIT",
     "authors": [
