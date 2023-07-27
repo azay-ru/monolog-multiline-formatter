@@ -46,7 +46,7 @@ final class MultiLineFormatter implements FormatterInterface
 //                    ? $this->printable( $value )
 //                    : $this->printable([ $key, $value ]) ;
 
-                $output .= $this->printable($value)
+                $output .= $this->printable($key)
                     . ': '
                     . $this->printable($value);
 
