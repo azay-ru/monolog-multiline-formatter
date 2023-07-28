@@ -12,21 +12,24 @@ use Monolog\Logger;
  */
 final class MultiLineFormatter implements FormatterInterface
 {
-    const DEFAULT_STYLE = 0;
+    const SIMPLE_STYLE = 0;
     const VAR_DUMP_STYLE = 1;
     const JSON_STYLE = 2;
 
     private $space = ' ';
+    private $pidPrefix = '.';
     private $break = "\n";
     private $dateFormat;
     private $formatStyle;
     private $lineBreaks;
+    private $pid;
 
     public function __construct(string $dateFormat = 'Y-m-d H:i:s', int $formatStyle = self::JSON_STYLE, bool $lineBreaks = true)
     {
         $this->dateFormat = $dateFormat;
         $this->formatStyle = $formatStyle;
         $this->lineBreaks = $lineBreaks;
+        $this->pid = getmypid();
     }
 
     public function format(array $record): string
@@ -34,23 +37,19 @@ final class MultiLineFormatter implements FormatterInterface
         $output =
             $record['datetime']->format($this->dateFormat)
             . $this->space
-            . (empty($record['channel']) ? '' : ($record['channel'] . $this->space))
+            . (empty($record['channel']) ? '' : ($record['channel'] . $this->pidPrefix))
+            . $this->pid
+            . $this->space
             . '[' . Logger::getLevelName($record['level']) . ']'
             . $this->space
             . $record['message']
             . $this->break;
 
-        if (!empty($record['context']))
-            foreach ($record['context'] as $key => $value) {
-//                $output .= empty( $key )
-//                    ? $this->printable( $value )
-//                    : $this->printable([ $key, $value ]) ;
-
-                $output .= $this->printable($key)
-                    . ': '
-                    . $this->printable($value);
-
-            }
+        foreach ($record['context'] as $key => $value) {
+            $output .= $key
+                . ': '
+                . $this->printable($value);
+        }
 
         if (!empty($record['extra']))
             $output .= $this->printable($record['extra']);
@@ -73,15 +72,17 @@ final class MultiLineFormatter implements FormatterInterface
 
     private function printable($arg)
     {
-        if (empty($arg))
-            return '' . $this->break;
-
         if (is_bool($arg))
             return ($arg ? 'True' : 'False') . $this->break;
 
-        if (!is_array($arg) && !is_object($arg))
-            return $arg . $this->break;
+        if (empty($arg))
+            return '' . $this->break;
 
+        if (is_object($arg))
+            return '{ instance ' . get_class($arg) . ' }' . $this->break;
+
+        if (!is_array($arg))
+            return $arg . $this->break;
 
         switch ($this->formatStyle) {
 
